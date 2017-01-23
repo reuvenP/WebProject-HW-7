@@ -11,8 +11,13 @@ var Schema = mongo.Schema;
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var db = mongo.connect('mongodb://localhost:27017/ex7');
-var http = require('http').Server(express);
-var io = require('socket.io')(http);
+
+var server2 = app.listen(3000);
+var io = require('socket.io').listen(server2);
+
+var globalUserName;
+
+
 
 var pubsubsettings = { // define mqtt server backend at MongoDB mqtt DB
     type: 'mongo',
@@ -33,13 +38,13 @@ var settings = {
 var server = new mosca.Server(settings);
 
 app.use(cookieParser());
-//app.use(express.static('public'));
-//app.use(express.static(path.join(__dirname, 'public')));
+
 
 app.get('/', function (req, res) {
     var userID = req.cookies['userID'];
     if (userID)
     {
+        globalUserName = userID;
         res.sendFile(__dirname + '/public/index.html');
     }
     else
@@ -67,10 +72,11 @@ app.get('/loginRest', function (req, res) {
 });
 
 io.on('connection', function (socket) {
-    console.log(socket.id);
-    /*var client = mqtt.connect('mqtt://localhost:1883',
+    var username = globalUserName;
+    console.log(username);
+    var client = mqtt.connect('mqtt://localhost:1883',
         { // keepalive: 10 set to 0 to disable
-            clientId: 'mqttjs_' + Math.random().toString(16).substr(2, 8),
+            clientId: username,
             // protocolId: 'MQTT'
             // protocolVersion: 4
             clean: false
@@ -82,8 +88,8 @@ io.on('connection', function (socket) {
             // incomingStore: a Store for the incoming packets
             // outgoingStore: a Store for the outgoing packets
             // will: a message that will sent by the broker automatically when the client disconnect badly. The format is:
-        });*/
+        });
+    socket.on('disconnect', function () {
+        client.end();
+    });
 });
-
-
-app.listen(3000);
