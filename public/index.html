@@ -3,8 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-
+<div id="header">
+    <div class="container">
+        <!-- Navbar ================================================== -->
+        <div id="logoArea" class="navbar">
+            <a id="smallScreen" data-target="#topMenu" data-toggle="collapse" class="btn btn-navbar">
+            </a>
+            <div class="navbar-inner">
+                <ul id="topMenu" class="nav pull-right">
+                    <li class=""><a role="button" onclick="logout()" data-toggle="modal" style="padding-right:0"><span class="btn btn-large btn-success">Logout</span></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function logout() {
+        document.cookie = 'userID' + '=; expires=Thu, 01-Jan-70 00:00:01 GMT;';
+        window.location = '/login';
+    }
+</script>
 </body>
 </html>
